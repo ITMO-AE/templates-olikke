@@ -2,10 +2,10 @@
 #define DEQUE_H
 #include <iostream>
 #include <stdexcept>
+#include <memory>
 
 /*
  1.  вроде б шаблонный класс д.б. описан и реализован в h, или придется подключать cpp ?????
- 2.  непонятно когда вызовутся const методы Front, Back, и оператор [] если они одноименные с no const
  */
 
 template <typename T>
@@ -25,6 +25,14 @@ private:
     size_t Count;
     Node<T>* Head;
     Node<T>* Tail;
+    T& at(size_t index)
+    {
+        if (index<0 || index>=Count)
+        throw std::out_of_range("Ёжкин кот!");
+        Node<T>* temp=Head;
+        for  (size_t i=0; i<index; i++,temp=temp->Next) {};
+        return temp->Data;
+    }
 public:
     Deque(): Count(0), Head(nullptr), Tail(nullptr) {}
     bool Empty() const  {return Count==0;}
@@ -61,44 +69,46 @@ public:
         }
         Count++;
     }
+
     T& At(size_t index)
     {
-        if (index<0 || index>=Count)
-        throw std::out_of_range("Ёжкин кот!");
-        Node<T>* temp=Head;
-
-        for  (size_t i=0; i<index; i++,temp=temp->Next) {};
-        return temp->Data;
+        std::cout<<"It's NO const At"<<std::endl;
+        return at(index);
+    }
+    const T& At(size_t index) const
+    {
+        std::cout<<"It's const At"<<std::endl;
+        return  const_cast<Deque*>(this)->at(index);
     }
     T& Front()
     {
-        std::cout<<"It's no const Front"<<std::endl;
+        std::cout<<"It's NO const Front"<<std::endl;
         return Head->Data;
     }
     const T& Front() const
     {
         std::cout<<"It's const Front"<<std::endl;
-        return  const_cast<Deque*>(this)->Front();
+        return  Head->Data;
     }
     T& Back()
     {
-        std::cout<<"It's no const Back"<<std::endl;
+        std::cout<<"It's NO const Back"<<std::endl;
         return Tail->Data;
     }
     const T& Back() const
     {
         std::cout<<"It's const Back"<<std::endl;
-        return  const_cast<Deque*>(this)->Back();
+        return Tail->Data;
     }
     T& operator[](size_t index)
     {
         std::cout<<"It's no const []"<<std::endl;
-         return At(index);
+        return at(index);
     }
     const T& operator[](size_t index) const
     {
         std::cout<<"It's const []"<<std::endl;
-        return  const_cast<Deque*>(&this[index]);
+        return  const_cast<Deque*>(this)->at(index);
     }
 };
 

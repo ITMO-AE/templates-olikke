@@ -10,15 +10,19 @@ int main()
     D.PushFront(10);
     D.PushBack(5);
     D.PushBack(12);
+    const Deque<int> cD=D;
     try {
         std::cout<<D.At(0)<<std::endl;
         std::cout<<D.At(1)<<std::endl;
         std::cout<<D.At(2)<<std::endl;
         std::cout<<D.At(3)<<std::endl;
-        int& k=D.Front();
-        k=65;
-        std::cout<<D.At(0)<<std::endl;
+        std::cout<<D.Front()<<std::endl;
+        std::cout<<D.Back()<<std::endl;
         std::cout<<D[2]<<std::endl;
+        std::cout<<cD.At(2)<<std::endl;
+        std::cout<<cD.Front()<<std::endl;
+        std::cout<<cD.Back()<<std::endl;
+        std::cout<<cD[0]<<std::endl;
         std::cout<<D.At(4)<<std::endl;
     } catch (std::out_of_range e) {
         std::cout<<e.what()<<std::endl;
